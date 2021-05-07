@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
@@ -14,8 +14,10 @@ export default function useCachedResources() {
 
         // Load fonts
         await Font.loadAsync({
-          ...Ionicons.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          ...MaterialCommunityIcons.font,
+          'inter-400': require('../assets/fonts/Inter-Regular.ttf'),
+          'inter-500': require('../assets/fonts/Inter-Medium.ttf'),
+          'inter-600': require('../assets/fonts/Inter-SemiBold.ttf')
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
