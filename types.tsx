@@ -5,18 +5,34 @@
 
 export type RootStackParamList = {
   Root: undefined;
+  Unsigned: undefined;
   NotFound: undefined;
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  ProfileTab: undefined;
+  CalendarTab: undefined;
+  ChatsTab: undefined;
 };
 
-export type TabOneParamList = {
-  TabOneScreen: undefined;
+export type ProfileTabParamList = {
+  ProfileScreen: undefined;
+  TrainersScreen: undefined;
+  TrainingScreen: undefined;
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type CalendarTabParamList = {
+  CalendarScreen: undefined;
+  TrainingScreen: undefined;
 };
+
+export type ChatsTabParamList = {
+  ChatsListScreen: undefined;
+  ChatScreen: undefined;
+};
+
+export type UnsignedStackParamList = {
+  EnterScreen: undefined;
+  SignUpScreen: undefined;
+  LoginScreen: undefined;
+}

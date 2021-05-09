@@ -11,6 +11,7 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import UnsignedNavigator from './UnsignedNavigator';
 
 export default function Navigation() {
   return (
@@ -25,9 +26,14 @@ export default function Navigation() {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const isLoggedIn = false;
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
+      {isLoggedIn ? (
+        <Stack.Screen name="Root" component={BottomTabNavigator} />
+      ) : (
+        <Stack.Screen name="Unsigned" component={UnsignedNavigator} />
+      )}
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );

@@ -12,14 +12,23 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          ProfileTab: {
             screens: {
-              TabOneScreen: 'one',
+              ProfileScreen: 'profile',
+              TrainersScreen: 'trainers',
+              TrainingScreen: 'training',
             },
           },
-          TabTwo: {
+          CalendarTab: {
             screens: {
-              TabTwoScreen: 'two',
+              CalendarScreen: 'calendar',
+              TrainingScreen: 'training'
+            },
+          },
+          ChatsTab: {
+            screens: {
+              ChatsListScreen: 'chatList',
+              ChatScreen: 'chat'
             },
           },
         },

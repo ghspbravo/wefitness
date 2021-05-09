@@ -3,72 +3,91 @@
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { View } from 'react-native';
+import Icon from '../components/Icon';
 
 import Colors from '../constants/Colors';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import NotFoundScreen from '../screens/NotFoundScreen';
+import { BottomTabParamList, ProfileTabParamList, CalendarTabParamList, ChatsTabParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
-
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors.acsent }}>
+      initialRouteName="ProfileTab"
+      tabBarOptions={{
+        activeTintColor: Colors.acsent,
+        showLabel: false,
+        style: {
+          backgroundColor: '#FAFAFA'
+        }
+      }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="ProfileTab"
+        component={ProfileNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon name="account" focused={focused} />
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="CalendarTab"
+        component={CalendarNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ focused }) => <TabBarIcon name="calendar-edit" focused={focused} />
+        }}
+      />
+      <BottomTab.Screen
+        name="ChatsTab"
+        component={ChatsNavigator}
+        options={{
+          tabBarIcon: ({ focused }) => <TabBarIcon name="message-outline" focused={focused} />
         }}
       />
     </BottomTab.Navigator>
   );
 }
 
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
-function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
+function TabBarIcon(props: { name: React.ComponentProps<typeof MaterialCommunityIcons>['name']; focused: boolean }) {
+  return (
+    <View style={{ backgroundColor: props.focused ? Colors.acsent : Colors.stroke, padding: 5, borderRadius: 50 }}>
+      <Icon {...props} />
+    </View>
+  );
 }
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const ProfileStack = createStackNavigator<ProfileTabParamList>();
 
-function TabOneNavigator() {
+function ProfileNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-      />
-    </TabOneStack.Navigator>
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="ProfileScreen" component={NotFoundScreen} />
+    </ProfileStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const TabTwoStack = createStackNavigator<CalendarTabParamList>();
 
-function TabTwoNavigator() {
+function CalendarNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-      />
+    <TabTwoStack.Navigator headerMode="none">
+      <TabTwoStack.Screen name="CalendarScreen" component={NotFoundScreen} />
     </TabTwoStack.Navigator>
+  );
+}
+
+const ChatsStack = createStackNavigator<ChatsTabParamList>();
+
+function ChatsNavigator() {
+  return (
+    <ChatsStack.Navigator headerMode="none">
+      <ChatsStack.Screen name="ChatsListScreen" component={NotFoundScreen} />
+    </ChatsStack.Navigator>
   );
 }
