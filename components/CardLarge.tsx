@@ -12,10 +12,10 @@ interface Props {
   width?: number;
 }
 
-const CardLarge = ({ image, title, width = 110, ...otherProps }: Props & TouchableOpacity['props']) => {
+const CardLarge = ({ image, title, width = 110, style, ...otherProps }: Props & TouchableOpacity['props']) => {
   return (
     <View>
-      <TouchableOpacity activeOpacity={0.6} style={{ flex: 1, width: width }} {...otherProps}>
+      <TouchableOpacity activeOpacity={0.6} style={[{ flex: 1, width: width }, style]} {...otherProps}>
         <Image use="square" width={width} height={width} src={image} />
         <Spacer />
         <Text>{title}</Text>

@@ -12,6 +12,12 @@ import Icon from '../components/Icon';
 
 import Colors from '../constants/Colors';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import ChatScreen from '../screens/Signed/ChatScreen';
+import ChatsListScreen from '../screens/Signed/ChatsListScreen';
+import ProfileScreen from '../screens/Signed/ProfileScreen';
+import TrainerScreen from '../screens/Signed/TrainerScreen';
+import TrainersScreen from '../screens/Signed/TrainersScreen';
+import TrainingScreen from '../screens/Signed/TrainingScreen';
 import { BottomTabParamList, ProfileTabParamList, CalendarTabParamList, ChatsTabParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -67,7 +73,10 @@ const ProfileStack = createStackNavigator<ProfileTabParamList>();
 function ProfileNavigator() {
   return (
     <ProfileStack.Navigator headerMode="none">
-      <ProfileStack.Screen name="ProfileScreen" component={NotFoundScreen} />
+      <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <ProfileStack.Screen name="TrainersScreen" component={TrainersScreen} />
+      <ProfileStack.Screen name="TrainerScreen" component={TrainerScreen} />
+      <ProfileStack.Screen name="TrainingScreen" component={TrainingScreen} />
     </ProfileStack.Navigator>
   );
 }
@@ -78,6 +87,7 @@ function CalendarNavigator() {
   return (
     <TabTwoStack.Navigator headerMode="none">
       <TabTwoStack.Screen name="CalendarScreen" component={NotFoundScreen} />
+      <TabTwoStack.Screen name="TrainingScreen" component={TrainingScreen} />
     </TabTwoStack.Navigator>
   );
 }
@@ -87,7 +97,8 @@ const ChatsStack = createStackNavigator<ChatsTabParamList>();
 function ChatsNavigator() {
   return (
     <ChatsStack.Navigator headerMode="none">
-      <ChatsStack.Screen name="ChatsListScreen" component={NotFoundScreen} />
+      <ChatsStack.Screen name="ChatsListScreen" component={ChatsListScreen} />
+      <ChatsStack.Screen name="ChatScreen" component={ChatScreen} />
     </ChatsStack.Navigator>
   );
 }

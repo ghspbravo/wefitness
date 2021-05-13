@@ -20,7 +20,7 @@ const Message = ({ children, isSent }: Props) => {
       width: 235
     },
     messageReceived: {
-      backgroundColor: Colors.stroke
+      backgroundColor: Colors.bgLight
     },
     messageSent: {
       marginLeft: 'auto',

@@ -18,6 +18,7 @@ export type BottomTabParamList = {
 export type ProfileTabParamList = {
   ProfileScreen: undefined;
   TrainersScreen: undefined;
+  TrainerScreen: undefined;
   TrainingScreen: undefined;
 };
 
@@ -35,4 +36,8 @@ export type UnsignedStackParamList = {
   EnterScreen: undefined;
   SignUpScreen: undefined;
   LoginScreen: undefined;
+}
+
+export type UserModelParamList = {
+  isLoggedIn: boolean;
 }

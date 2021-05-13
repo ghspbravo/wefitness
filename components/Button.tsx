@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
 import { Text } from './Typo';
@@ -12,9 +12,9 @@ export enum ButtonTypes {
 }
 
 interface Props {
-  caption: string;
+  caption: string | React.ReactElement;
   use?: 'primary' | 'outline' | 'link' | ButtonTypes;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<TextStyle>;
 }
 
 export default function Button({
@@ -48,7 +48,8 @@ export default function Button({
     buttonStyles.push({
       borderStyle: 'solid',
       borderWidth: 1,
-      borderColor: Colors.acsent
+      borderColor: Colors.acsent,
+      backgroundColor: Colors.white
     });
   }
 
