@@ -1,7 +1,9 @@
+import moment from 'moment';
+import firebase from 'firebase';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { GestureResponderEvent, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 import Icon from '../../components/Icon';
@@ -11,8 +13,42 @@ import Spacer from '../../components/Spacer';
 import { SafeAreaView, ScrollView, View } from '../../components/View';
 import Colors from '../../constants/Colors';
 import { ChatsTabParamList } from '../../types';
+import { UserContext } from '../../context';
 
-export default function ChatScreen({ navigation }: StackScreenProps<ChatsTabParamList, 'ChatScreen'>) {
+export default function ChatScreen({ route, navigation }: StackScreenProps<ChatsTabParamList, 'ChatScreen'>) {
+  const { id, name }: any = route.params;
+  const [user] = useContext(UserContext);
+
+  const [loading, loadingSet] = useState(false);
+  const [newMessage, newMessageSet] = useState('');
+  const [messages, messagesSet] = useState<{ senderId: string; message: string; date: number }[]>([]);
+  useEffect(() => {
+    firebase
+      .database()
+      .ref(`chatrooms/${id}`)
+      .on('value', (snapshot) => {
+        const value = snapshot.val();
+        messagesSet(Object.values(value || {}));
+      });
+  }, []);
+
+  const onMessageSend = () => {
+    if (!newMessage) return;
+    loadingSet(true);
+
+    firebase
+      .database()
+      .ref(`chatrooms/${id}`)
+      .push({
+        senderId: user.id,
+        message: newMessage,
+        date: moment().valueOf()
+      })
+      .then(() => {
+        newMessageSet('');
+        loadingSet(false);
+      });
+  };
   return (
     <SafeAreaView>
       <StatusBar style="dark" />
@@ -20,42 +56,29 @@ export default function ChatScreen({ navigation }: StackScreenProps<ChatsTabPara
         <View style={{ flex: 1, paddingHorizontal: 15 }}>
           <ScrollView>
             <View style={{ flex: 1 }}>
-              <Header hasBackAction title="Костя - бокс" />
-              <Message>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci lisis mollis.
-              </Message>
-              <Spacer />
-              <Message isSent>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </Message>
-              <Spacer />
-              <Message>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci lisis mollis.
-              </Message>
-              <Spacer />
-              <Message isSent>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </Message>
-              <Spacer />
-              <Message>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci lisis mollis.
-              </Message>
-              <Spacer />
-              <Message isSent>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </Message>
-              <Spacer />
-              <Message>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla quam eu faci lisis mollis.
-              </Message>
-              <Spacer />
-              <Message isSent>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </Message>
-              <Spacer />
+              <Header hasBackAction title={name} />
+
+              {messages.map((message) => (
+                <View key={message.date}>
+                  <Message isSent={message.senderId === user.id}>{message.message}</Message>
+                  <Spacer />
+                </View>
+              ))}
             </View>
           </ScrollView>
           <Spacer />
           <View style={{ position: 'relative' }}>
-            <Input placeholder="Введите сообщение..." />
+            <Input
+              value={newMessage}
+              onChangeText={newMessageSet}
+              onSubmitEditing={onMessageSend}
+              placeholder="Введите сообщение..."
+            />
 
             <View style={{ position: 'absolute', right: 7, bottom: 10, zIndex: 10 }}>
               <Button
-                onPress={() => {
-                  alert('pressed');
-                }}
+                disabled={loading}
+                onPress={onMessageSend}
                 style={{ width: 34, height: 34, padding: 4 }}
                 caption={<Icon color={Colors.white} name="arrow-up" />}
               />

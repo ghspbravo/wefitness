@@ -19,6 +19,8 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.zotovda.wefitness",
+      "buildNumber": "1.0.1",
       "supportsTablet": true
     },
     "android": {

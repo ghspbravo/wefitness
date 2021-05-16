@@ -9,6 +9,8 @@ import { Text } from '../../components/Typo';
 import { SafeAreaView, View } from '../../components/View';
 import Colors from '../../constants/Colors';
 import { UserContext } from '../../context';
+import firebase from 'firebase';
+import { errorResponse } from '../../types';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -21,9 +23,25 @@ export default function LoginScreen() {
   const [password, passwordSet] = useState('');
   const [error, errorSet] = useState('');
 
-  const [user, setUser] = useContext(UserContext);
   const onSubmitHandler = () => {
-    setUser({ isLoggedIn: true });
+    if (!email || !password) {
+      return errorSet('Заполните все поля!');
+    }
+    setLoading(true);
+    errorSet('');
+
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        if (!response.user) return null;
+      })
+      .catch((err: errorResponse) => {
+        errorSet(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <SafeAreaView>

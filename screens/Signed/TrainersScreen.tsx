@@ -1,6 +1,7 @@
+import firebase from 'firebase';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CardLarge from '../../components/CardLarge';
 import Header from '../../components/Header';
 import { Text } from '../../components/Typo';
@@ -8,6 +9,18 @@ import { SafeAreaView, ScrollView, View } from '../../components/View';
 import { ProfileTabParamList } from '../../types';
 
 export default function TrainersScreen({ navigation }: StackScreenProps<ProfileTabParamList, 'TrainersScreen'>) {
+  const [categories, categoriesSet] = useState<any>({});
+
+  useEffect(() => {
+    firebase
+      .database()
+      .ref('categories')
+      .once('value')
+      .then((snapshot) => {
+        const values = snapshot.val();
+        categoriesSet(values || {});
+      });
+  }, []);
   return (
     <SafeAreaView>
       <StatusBar style="dark" />
@@ -15,29 +28,22 @@ export default function TrainersScreen({ navigation }: StackScreenProps<ProfileT
         <View style={{ flex: 1, paddingHorizontal: 15 }}>
           <Header title="Тренеры" hasBackAction />
 
-          <Text use="h2">Силовые</Text>
-          <ScrollView style={{ paddingVertical: 10 }} horizontal>
-            <CardLarge
-              onPress={() => navigation.push('TrainerScreen')}
-              style={{ marginRight: 15 }}
-              title="Петров Антон"
-            />
-            <CardLarge
-              onPress={() => navigation.push('TrainerScreen')}
-              style={{ marginRight: 15 }}
-              title="Косыгина Ольга Паловна"
-            />
-            <CardLarge
-              onPress={() => navigation.push('TrainerScreen')}
-              style={{ marginRight: 15 }}
-              title="Петров Антон"
-            />
-            <CardLarge
-              onPress={() => navigation.push('TrainerScreen')}
-              style={{ marginRight: 15 }}
-              title="Косыгина Ольга"
-            />
-          </ScrollView>
+          {Object.keys(categories).map((cat) => {
+            return (
+              <View key={cat}>
+                <Text use="h2">{cat}</Text>
+                {(categories[cat] || []).map((user: { name: string; uid: string }) => (
+                  <ScrollView style={{ paddingVertical: 10 }} horizontal>
+                    <CardLarge
+                      onPress={() => navigation.push('TrainerScreen', { uid: user.uid } as any)}
+                      style={{ marginRight: 15 }}
+                      title={user.name}
+                    />
+                  </ScrollView>
+                ))}
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -1,6 +1,7 @@
+import firebase from 'firebase/app';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
@@ -14,14 +15,28 @@ import { Text } from '../../components/Typo';
 import Tabs from '../../components/Tabs';
 import CardSmall from '../../components/CardSmall';
 import TrainingDateItem from '../../components/TrainingDateItem';
+import { getShortDate, getShortName, isActiveDate } from '../../helpers';
 
 export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTabParamList, 'ProfileScreen'>) {
   const insets = useSafeAreaInsets();
 
-  const [user, setUser] = useContext(UserContext);
+  const [user] = useContext(UserContext);
   const onLogoutPress = () => {
-    setUser({ isLoggedIn: false });
+    firebase.auth().signOut();
   };
+
+  const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
+  useEffect(() => {
+    const trainingsRef = firebase.database().ref(`userTrainings/${user.id}`);
+    trainingsRef.once('value', (snapshot) => {
+      const value = snapshot.val();
+      trainingsSet(Object.values(value || {}));
+    });
+
+    return () => {
+      trainingsRef.off('value');
+    };
+  }, []);
   return (
     <ScrollView>
       <StatusBar style="light" />
@@ -45,9 +60,9 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
 
       <View style={{ paddingHorizontal: 15 }}>
         <View style={{ alignItems: 'center' }}>
-          <Text use="h1">Виктория Робинсон</Text>
+          <Text use="h1">{getShortName(user.name)}</Text>
           <Spacer />
-          <Text use="h6">Москва</Text>
+          <Text use="h6">{user.city}</Text>
           <Spacer height={30} />
         </View>
 
@@ -68,8 +83,16 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
           }
           tab2Content={
             <View>
-              <TrainingDateItem onPress={() => navigation.push('TrainingScreen')} isActive={true} title="Стречинг" date="29.09" withLine />
-              <TrainingDateItem isActive={false} title="Стречинг" date="29.09" withLine />
+              {trainings.map((training) => (
+                <TrainingDateItem
+                  key={training.id}
+                  onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
+                  isActive={isActiveDate(training.date, training.duration)}
+                  title={training.title}
+                  date={getShortDate(training.date)}
+                  withLine
+                />
+              ))}
             </View>
           }
         />

@@ -1,5 +1,6 @@
+import firebase from 'firebase/app';
 import { useNavigation } from '@react-navigation/core';
-import React, { Ref, useContext, useRef, useState } from 'react';
+import React, { Ref, useRef, useState } from 'react';
 import { Keyboard, TextInput, TouchableWithoutFeedback } from 'react-native';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
@@ -8,7 +9,7 @@ import Spacer from '../../components/Spacer';
 import { Text } from '../../components/Typo';
 import { SafeAreaView, ScrollView, View } from '../../components/View';
 import Colors from '../../constants/Colors';
-import { UserContext } from '../../context';
+import { errorResponse } from '../../types';
 
 export default function RegistrationScreen() {
   const navigation = useNavigation();
@@ -25,9 +26,30 @@ export default function RegistrationScreen() {
   const [city, citySet] = useState('');
   const [error, errorSet] = useState('');
 
-  const [user, setUser] = useContext(UserContext);
   const onSubmitHandler = () => {
-    setUser({ isLoggedIn: true });
+    if (!email || !password || !name || !city) {
+      return errorSet('Заполните все поля!');
+    }
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+        const uid = user.user?.uid;
+        firebase
+          .database()
+          .ref('users/' + uid)
+          .set({
+            name,
+            city
+          });
+      })
+      .catch((err: errorResponse) => {
+        errorSet(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <SafeAreaView>

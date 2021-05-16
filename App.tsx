@@ -1,19 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { UserContext } from './context';
 
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
+import { UserModelParamList } from './types';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
+  const [user, setUser] = React.useState<UserModelParamList>({ isLoggedIn: false });
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation />
+        <UserContext.Provider value={[user, setUser]}>
+          <Navigation />
+        </UserContext.Provider>
         <StatusBar />
       </SafeAreaProvider>
     );

@@ -1,6 +1,7 @@
+import firebase from 'firebase';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import Header from '../../components/Header';
 import Image from '../../components/Image';
@@ -10,9 +11,33 @@ import Colors from '../../constants/Colors';
 import { ProfileTabParamList } from '../../types';
 import { Text } from '../../components/Typo';
 import TrainingDateItem from '../../components/TrainingDateItem';
+import { getShortDate, getShortName, isActiveDate } from '../../helpers';
 
-export default function TrainerScreen({ navigation }: StackScreenProps<ProfileTabParamList, 'TrainerScreen'>) {
+export default function TrainerScreen({ route, navigation }: StackScreenProps<ProfileTabParamList, 'TrainerScreen'>) {
   const insets = useSafeAreaInsets();
+  const { uid }: any = route.params;
+
+  const [trainer, trainerSet] = useState<{ id: string; name?: string; city?: string }>({ id: uid });
+  const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
+  useEffect(() => {
+    firebase
+      .database()
+      .ref(`users/${uid}`)
+      .once('value')
+      .then((snapshot) => {
+        const value = snapshot.val();
+        trainerSet({ id: uid, ...value });
+      });
+
+    firebase
+      .database()
+      .ref(`userTrainings/${uid}`)
+      .once('value')
+      .then((snapshot) => {
+        const value = snapshot.val();
+        trainingsSet(Object.values(value || {}));
+      });
+  }, []);
   return (
     <ScrollView>
       <StatusBar style="light" />
@@ -23,11 +48,7 @@ export default function TrainerScreen({ navigation }: StackScreenProps<ProfileTa
           backgroundColor: Colors.acsent,
           height: 265
         }}>
-        <Header
-          title="Профиль"
-          isAcsent
-          hasBackAction
-        />
+        <Header title="Профиль" isAcsent hasBackAction />
         <View style={{ alignItems: 'center' }}>
           <Image style={{ marginTop: 15 }} use="rounded" width={160} height={160} />
         </View>
@@ -36,21 +57,23 @@ export default function TrainerScreen({ navigation }: StackScreenProps<ProfileTa
 
       <View style={{ paddingHorizontal: 15 }}>
         <View style={{ alignItems: 'center' }}>
-          <Text use="h1">Виктория Робинсон</Text>
+          <Text use="h1">{getShortName(trainer.name)}</Text>
           <Spacer />
-          <Text use="h6">Москва</Text>
+          <Text use="h6">{trainer.city}</Text>
           <Spacer height={30} />
         </View>
 
         <View>
-          <TrainingDateItem
-            onPress={() => navigation.push('TrainingScreen')}
-            isActive={true}
-            title="Стречинг"
-            date="29.09"
-            withLine
-          />
-          <TrainingDateItem isActive={false} title="Стречинг" date="29.09" withLine />
+          {trainings.map((training) => (
+            <TrainingDateItem
+              key={training.id}
+              onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
+              isActive={isActiveDate(training.date, training.duration)}
+              title={training.title}
+              date={getShortDate(training.date)}
+              withLine
+            />
+          ))}
         </View>
       </View>
     </ScrollView>

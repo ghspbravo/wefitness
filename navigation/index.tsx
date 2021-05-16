@@ -8,6 +8,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { UserContext } from '../context';
 
+// init db
+import { setFirebaseBindings } from '../firebase';
+
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList, UserModelParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -26,22 +29,17 @@ export default function Navigation() {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
-const initialUser: UserModelParamList = {
-  isLoggedIn: false
-};
-
 function RootNavigator() {
-  const [user, setUser] = React.useState<UserModelParamList>(initialUser);
+  const [user] = React.useContext(UserContext);
+  setFirebaseBindings();
   return (
-    <UserContext.Provider value={[user, setUser]}>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {user.isLoggedIn ? (
-          <Stack.Screen name="Root" component={BottomTabNavigator} />
-        ) : (
-          <Stack.Screen name="Unsigned" component={UnsignedNavigator} />
-        )}
-        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      </Stack.Navigator>
-    </UserContext.Provider>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {user.isLoggedIn ? (
+        <Stack.Screen name="Root" component={BottomTabNavigator} />
+      ) : (
+        <Stack.Screen name="Unsigned" component={UnsignedNavigator} />
+      )}
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+    </Stack.Navigator>
   );
 }

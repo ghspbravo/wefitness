@@ -36,8 +36,17 @@ export type UnsignedStackParamList = {
   EnterScreen: undefined;
   SignUpScreen: undefined;
   LoginScreen: undefined;
-}
+};
 
 export type UserModelParamList = {
   isLoggedIn: boolean;
-}
+
+  id?: string;
+  name?: string;
+  city?: string;
+};
+
+export type errorResponse = {
+  code: string;
+  message: string;
+};
