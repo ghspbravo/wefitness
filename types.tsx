@@ -44,6 +44,7 @@ export type UserModelParamList = {
   id?: string;
   name?: string;
   city?: string;
+  category?: string;
 };
 
 export type errorResponse = {

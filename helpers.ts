@@ -9,8 +9,12 @@ export function getShortName(name?: string) {
   return `${nameParts[0]} ${nameParts[1] ? nameParts[1] : ''}`;
 }
 
-export function getShortDate(timestamp: number) {
+export function getShortDate(timestamp: number | string) {
   return moment(timestamp).format('DD.MM');
+}
+
+export function getTime(timestamp: number | string) {
+  return moment(timestamp).format('hh:mm');
 }
 
 export function isActiveDate(timestamp: number, duration: number) {

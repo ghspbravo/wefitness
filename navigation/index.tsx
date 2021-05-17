@@ -15,12 +15,14 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList, UserModelParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import TrainersTabNavigator from './TrainersTabNavigator';
 import UnsignedNavigator from './UnsignedNavigator';
+import UnsignedTrainersNavigator from './UnsignedTrainersNavigator';
 
-export default function Navigation() {
+export default function Navigation({ useTrainer }: any) {
   return (
     <NavigationContainer linking={LinkingConfiguration}>
-      <RootNavigator />
+      {useTrainer ? <TrainersNavigator /> : <RootNavigator />}
     </NavigationContainer>
   );
 }
@@ -38,6 +40,21 @@ function RootNavigator() {
         <Stack.Screen name="Root" component={BottomTabNavigator} />
       ) : (
         <Stack.Screen name="Unsigned" component={UnsignedNavigator} />
+      )}
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+    </Stack.Navigator>
+  );
+}
+
+function TrainersNavigator() {
+  const [user] = React.useContext(UserContext);
+  setFirebaseBindings();
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {user.isLoggedIn ? (
+        <Stack.Screen name="Root" component={TrainersTabNavigator} />
+      ) : (
+        <Stack.Screen name="Unsigned" component={UnsignedTrainersNavigator} />
       )}
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
