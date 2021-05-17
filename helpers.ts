@@ -14,7 +14,7 @@ export function getShortDate(timestamp: number | string) {
 }
 
 export function getTime(timestamp: number | string) {
-  return moment(timestamp).format('hh:mm');
+  return moment(timestamp).format('HH-mm');
 }
 
 export function isActiveDate(timestamp: number, duration: number) {

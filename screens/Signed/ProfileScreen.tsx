@@ -28,7 +28,7 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
   const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
   useEffect(() => {
     const trainingsRef = firebase.database().ref(`userTrainings/${user.id}`);
-    trainingsRef.once('value', (snapshot) => {
+    trainingsRef.on('value', (snapshot) => {
       const value = snapshot.val();
       trainingsSet(Object.values(value || {}));
     });

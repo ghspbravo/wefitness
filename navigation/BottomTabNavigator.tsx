@@ -12,6 +12,7 @@ import Icon from '../components/Icon';
 
 import Colors from '../constants/Colors';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import CalendarScreen from '../screens/Signed/CalendarScreen';
 import ChatScreen from '../screens/Signed/ChatScreen';
 import ChatsListScreen from '../screens/Signed/ChatsListScreen';
 import ProfileScreen from '../screens/Signed/ProfileScreen';
@@ -86,7 +87,7 @@ const TabTwoStack = createStackNavigator<CalendarTabParamList>();
 function CalendarNavigator() {
   return (
     <TabTwoStack.Navigator headerMode="none">
-      <TabTwoStack.Screen name="CalendarScreen" component={NotFoundScreen} />
+      <TabTwoStack.Screen name="CalendarScreen" component={CalendarScreen} />
       <TabTwoStack.Screen name="TrainingScreen" component={TrainingScreen} />
     </TabTwoStack.Navigator>
   );

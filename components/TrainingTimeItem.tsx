@@ -7,7 +7,7 @@ import { View } from './View';
 interface Props {
   title: string;
   time: string;
-  duration?: string;
+  duration?: number;
   withLine?: boolean;
 }
 
@@ -42,7 +42,7 @@ export default function TrainingTimeItem({
         </View>
         <Text use="h6">{title}</Text>
         <View style={{ marginLeft: 'auto' }}>
-          <Text>{duration}</Text>
+          <Text>{duration?.toString()}min.</Text>
         </View>
       </TouchableOpacity>
       {withLine && <View style={styles.line} />}

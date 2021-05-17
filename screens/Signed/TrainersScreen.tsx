@@ -32,8 +32,8 @@ export default function TrainersScreen({ navigation }: StackScreenProps<ProfileT
             return (
               <View key={cat}>
                 <Text use="h2">{cat}</Text>
-                {(categories[cat] || []).map((user: { name: string; uid: string }) => (
-                  <ScrollView style={{ paddingVertical: 10 }} horizontal>
+                {((Object.values(categories[cat]) as any) || []).map((user: { name: string; uid: string }) => (
+                  <ScrollView key={user.uid} style={{ paddingVertical: 10 }} horizontal>
                     <CardLarge
                       onPress={() => navigation.push('TrainerScreen', { uid: user.uid } as any)}
                       style={{ marginRight: 15 }}
