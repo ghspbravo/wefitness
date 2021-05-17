@@ -2,11 +2,11 @@
   "expo": {
     "name": "wefitness",
     "slug": "wefitness",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -20,7 +20,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.zotovda.wefitness",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {

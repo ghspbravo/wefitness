@@ -20,7 +20,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.zotovda.wefitnesstrainers",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
