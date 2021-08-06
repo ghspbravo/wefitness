@@ -14,12 +14,14 @@ import { SafeAreaView, ScrollView, View } from '../../components/View';
 import Colors from '../../constants/Colors';
 import { ChatsTabParamList } from '../../types';
 import { UserContext } from '../../context';
+import { Text } from '../../components/Typo';
 
 export default function ChatScreen({ route, navigation }: StackScreenProps<ChatsTabParamList, 'ChatScreen'>) {
   const { id, name, userId }: any = route.params;
   const [user] = useContext(UserContext);
 
   const [loading, loadingSet] = useState(false);
+  const [loadingMessages, loadingMessagesSet] = useState(true);
   const [newMessage, newMessageSet] = useState('');
   const [messages, messagesSet] = useState<{ senderId: string; message: string; date: number }[]>([]);
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function ChatScreen({ route, navigation }: StackScreenProps<Chats
       .ref(`chatrooms/${id}`)
       .on('value', (snapshot) => {
         const value = snapshot.val();
+        loadingMessagesSet(false);
         messagesSet(Object.values(value || {}));
       });
   }, []);
@@ -76,12 +79,18 @@ export default function ChatScreen({ route, navigation }: StackScreenProps<Chats
                 }
               />
 
-              {messages.map((message) => (
-                <View key={message.date}>
-                  <Message isSent={message.senderId === user.id}>{message.message}</Message>
-                  <Spacer />
-                </View>
-              ))}
+              {loadingMessages ? (
+                <Text>...</Text>
+              ) : messages.length > 0 ? (
+                messages.map((message) => (
+                  <View key={message.date}>
+                    <Message isSent={message.senderId === user.id}>{message.message}</Message>
+                    <Spacer />
+                  </View>
+                ))
+              ) : (
+                <Text>Сообщений нет</Text>
+              )}
             </View>
           </ScrollView>
           <Spacer />

@@ -26,11 +26,13 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
     firebase.auth().signOut();
   };
 
+  const [isLoading, isLoadingSet] = useState(true);
   const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
   useEffect(() => {
     const trainingsRef = firebase.database().ref(`userTrainings/${user.id}`);
     trainingsRef.on('value', (snapshot) => {
       const value = snapshot.val();
+      isLoadingSet(false);
       trainingsSet(Object.values(value || {}));
     });
 
@@ -104,16 +106,22 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
           }
           tab2Content={
             <View>
-              {trainings.map((training) => (
-                <TrainingDateItem
-                  key={training.id}
-                  onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
-                  isActive={isActiveDate(training.date, training.duration)}
-                  title={training.title}
-                  date={getShortDate(training.date)}
-                  withLine
-                />
-              ))}
+              {isLoading ? (
+                <Text>...</Text>
+              ) : trainings?.length > 0 ? (
+                trainings.map((training) => (
+                  <TrainingDateItem
+                    key={training.id}
+                    onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
+                    isActive={isActiveDate(training.date, training.duration)}
+                    title={training.title}
+                    date={getShortDate(training.date)}
+                    withLine
+                  />
+                ))
+              ) : (
+                <Text>Вы еще не записывались на тренировки</Text>
+              )}
             </View>
           }
         />

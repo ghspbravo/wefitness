@@ -7,9 +7,11 @@ import Header from '../../components/Header';
 import { SafeAreaView, ScrollView, View } from '../../components/View';
 import { ChatsTabParamList } from '../../types';
 import { UserContext } from '../../context';
+import { Text } from '../../components/Typo';
 
 export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTabParamList, 'ChatsListScreen'>) {
   const [user] = useContext(UserContext);
+  const [isLoading, isLoadingSet] = useState(true);
   const [chatrooms, chatroomsSet] = useState<{ id: string; name: string; userId?: string; lastMessage: string }[]>([]);
   useEffect(() => {
     firebase
@@ -17,6 +19,7 @@ export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTa
       .ref(`userChatrooms/${user.id}`)
       .on('value', (snapshot) => {
         const value = snapshot.val();
+        isLoadingSet(false);
         chatroomsSet(Object.values(value || {}));
       });
   }, []);
@@ -40,16 +43,22 @@ export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTa
         <View style={{ flex: 1, paddingHorizontal: 15 }}>
           <Header title="Чат" />
 
-          {chatrooms.map((chatroom) => (
-            <CardSmall
-              image={avatars[chatroom.userId || 0]}
-              key={chatroom.id}
-              onPress={() => navigation.push('ChatScreen', { ...chatroom } as any)}
-              withLine
-              title={chatroom.name}
-              text={chatroom.lastMessage}
-            />
-          ))}
+          {isLoading ? (
+            <Text>...</Text>
+          ) : chatrooms.length > 0 ? (
+            chatrooms.map((chatroom) => (
+              <CardSmall
+                image={avatars[chatroom.userId || 0]}
+                key={chatroom.id}
+                onPress={() => navigation.push('ChatScreen', { ...chatroom } as any)}
+                withLine
+                title={chatroom.name}
+                text={chatroom.lastMessage}
+              />
+            ))
+          ) : (
+            <Text>Нет активных диалогов с тренерами</Text>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
