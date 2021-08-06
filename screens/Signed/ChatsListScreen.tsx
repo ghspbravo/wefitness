@@ -8,6 +8,7 @@ import { SafeAreaView, ScrollView, View } from '../../components/View';
 import { ChatsTabParamList } from '../../types';
 import { UserContext } from '../../context';
 import { Text } from '../../components/Typo';
+import { isTrainerApp } from '../../helpers';
 
 export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTabParamList, 'ChatsListScreen'>) {
   const [user] = useContext(UserContext);
@@ -57,7 +58,7 @@ export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTa
               />
             ))
           ) : (
-            <Text>Нет активных диалогов с тренерами</Text>
+            <Text>Нет активных диалогов с {isTrainerApp ? 'клиентами' : 'тренерами'}</Text>
           )}
         </View>
       </ScrollView>

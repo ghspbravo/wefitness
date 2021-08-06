@@ -15,6 +15,7 @@ import { Text } from '../../components/Typo';
 import TrainingDateItem from '../../components/TrainingDateItem';
 import { getShortDate, getShortName, isActiveDate } from '../../helpers';
 
+let avatarLoaded = false;
 export default function TrainerProfileScreen({ navigation }: StackScreenProps<ProfileTabParamList, 'ProfileScreen'>) {
   const insets = useSafeAreaInsets();
 
@@ -24,11 +25,13 @@ export default function TrainerProfileScreen({ navigation }: StackScreenProps<Pr
   };
 
   const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
+  const [isLoading, isLoadingSet] = useState(true);
   useEffect(() => {
     const trainingsRef = firebase.database().ref(`userTrainings/${user.id}`);
     trainingsRef.on('value', (snapshot) => {
       const value = snapshot.val();
       trainingsSet(Object.values(value || {}));
+      isLoadingSet(false);
     });
 
     return () => {
@@ -36,9 +39,24 @@ export default function TrainerProfileScreen({ navigation }: StackScreenProps<Pr
     };
   }, []);
   const [avatar, avatarSet] = useState();
-  useEffect(() => {
+  let repeatCounter = 0;
+  const tryLoadAvatar = () => {
     const avatarRef = firebase.storage().ref(`users/${user.id}.png`);
-    avatarRef.getDownloadURL().then(avatarSet);
+    avatarRef.getDownloadURL().then((url) => {
+      ++repeatCounter;
+      avatarSet(url);
+
+      if (url || repeatCounter > 4) {
+        avatarLoaded = true;
+      } else {
+        setTimeout(tryLoadAvatar, 1000);
+      }
+    });
+  };
+  useEffect(() => {
+    if (!avatarLoaded) {
+      tryLoadAvatar();
+    }
   }, []);
   return (
     <ScrollView>
@@ -70,16 +88,22 @@ export default function TrainerProfileScreen({ navigation }: StackScreenProps<Pr
         </View>
 
         <View>
-          {trainings.map((training) => (
-            <TrainingDateItem
-              key={training.id}
-              onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
-              isActive={isActiveDate(training.date, training.duration)}
-              title={training.title}
-              date={getShortDate(training.date)}
-              withLine
-            />
-          ))}
+          {isLoading ? (
+            <Text>...</Text>
+          ) : trainings.length > 0 ? (
+            trainings.map((training) => (
+              <TrainingDateItem
+                key={training.id}
+                onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
+                isActive={isActiveDate(training.date, training.duration)}
+                title={training.title}
+                date={getShortDate(training.date)}
+                withLine
+              />
+            ))
+          ) : (
+            <Text>Нет созданных тренировок</Text>
+          )}
         </View>
       </View>
     </ScrollView>

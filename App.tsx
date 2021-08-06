@@ -1,14 +1,12 @@
-import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { UserContext } from './context';
+import { isTrainerApp } from './helpers';
 
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import { UserModelParamList } from './types';
-
-const isTrainerApp = Constants.manifest.name === 'wefitness-trainer';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

@@ -61,7 +61,7 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
   const { date, description, duration, inventory, link, title, trainerName, trainerId } = training;
 
   const onViewPress = () => {
-    Linking.openURL(link || '');
+    Linking.openURL(link || '').catch(() => alert('Невозможно открыть тренировку'));
   };
   const onJoinPress = async () => {
     loadingSet(true);

@@ -1,4 +1,7 @@
 import moment from 'moment';
+import Constants from 'expo-constants';
+
+export const isTrainerApp = Constants.manifest.name === 'wefitness-trainer';
 
 export function getShortName(name?: string) {
   if (!name) {
