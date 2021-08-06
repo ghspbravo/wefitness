@@ -19,7 +19,7 @@ export default function CalendarScreen({ navigation }: StackScreenProps<ProfileT
   const insets = useSafeAreaInsets();
   const today = moment(new Date());
 
-  let year = 2021; //hardcoded
+  let year = new Date().getFullYear();
   const [month, monthSet] = useState(today.month() + 1);
   const [monthLabel, monthLabelSet] = useState(today.format('MMMM'));
   const [selectedDay, selectedDaySet] = useState(today.date());
@@ -27,7 +27,7 @@ export default function CalendarScreen({ navigation }: StackScreenProps<ProfileT
   const daysInMonth = moment()
     .set({ month: month - 1 })
     .daysInMonth();
-  const offsetDaysCount = new Date(year, month - 1).getDay();
+  const offsetDaysCount = moment(new Date(year, month - 1)).isoWeekday() || 1;
 
   const [isLoading, isLoadingSet] = useState(true);
   const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
