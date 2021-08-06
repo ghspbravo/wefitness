@@ -16,7 +16,7 @@ import { ChatsTabParamList } from '../../types';
 import { UserContext } from '../../context';
 
 export default function ChatScreen({ route, navigation }: StackScreenProps<ChatsTabParamList, 'ChatScreen'>) {
-  const { id, name }: any = route.params;
+  const { id, name, userId }: any = route.params;
   const [user] = useContext(UserContext);
 
   const [loading, loadingSet] = useState(false);
@@ -49,6 +49,10 @@ export default function ChatScreen({ route, navigation }: StackScreenProps<Chats
         loadingSet(false);
       });
   };
+
+  const onNavigateProfilePress = () => {
+    navigation.push('TrainerScreen', { uid: userId } as any);
+  };
   return (
     <SafeAreaView>
       <StatusBar style="dark" />
@@ -56,7 +60,21 @@ export default function ChatScreen({ route, navigation }: StackScreenProps<Chats
         <View style={{ flex: 1, paddingHorizontal: 15 }}>
           <ScrollView>
             <View style={{ flex: 1 }}>
-              <Header hasBackAction title={name} />
+              <Header
+                hasBackAction
+                title={name}
+                right={
+                  userId ? (
+                    <Button
+                      disabled={loading}
+                      use="outline"
+                      onPress={onNavigateProfilePress}
+                      style={{ padding: 6 }}
+                      caption={'Профиль'}
+                    />
+                  ) : undefined
+                }
+              />
 
               {messages.map((message) => (
                 <View key={message.date}>

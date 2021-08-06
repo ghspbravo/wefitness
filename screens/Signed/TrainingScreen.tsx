@@ -79,7 +79,8 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
         id: getChatroomId(user.id || '', trainerId || ''),
         name: `${trainerName?.split(' ')[0]} – ${title}`,
         lastMessage: '',
-        lastMessageDate: 0
+        lastMessageDate: 0,
+        userId: trainerId
       });
     // for trainer too
     await firebase
@@ -89,7 +90,8 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
         id: getChatroomId(user.id || '', trainerId || ''),
         name: user.name?.split(' ')[0],
         lastMessage: '',
-        lastMessageDate: 0
+        lastMessageDate: 0,
+        userId: user.id
       });
 
     loadingSet(false);

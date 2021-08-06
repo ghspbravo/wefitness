@@ -13,6 +13,7 @@ import Icon from '../components/Icon';
 import Colors from '../constants/Colors';
 import ChatScreen from '../screens/Signed/ChatScreen';
 import ChatsListScreen from '../screens/Signed/ChatsListScreen';
+import ClientScreen from '../screens/Signed/ClientScreen';
 import CreateTrainingScreen from '../screens/Signed/CreateTrainingScreen';
 import TrainerProfileScreen from '../screens/Signed/TrainerProfileScreen';
 import TrainingScreen from '../screens/Signed/TrainingScreen';
@@ -94,6 +95,7 @@ function ChatsNavigator() {
     <ChatsStack.Navigator headerMode="none">
       <ChatsStack.Screen name="ChatsListScreen" component={ChatsListScreen} />
       <ChatsStack.Screen name="ChatScreen" component={ChatScreen} />
+      <ChatsStack.Screen name="TrainerScreen" component={ClientScreen} />
     </ChatsStack.Navigator>
   );
 }

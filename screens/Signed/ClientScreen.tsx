@@ -12,13 +12,13 @@ import { ProfileTabParamList } from '../../types';
 import { Text } from '../../components/Typo';
 import TrainingDateItem from '../../components/TrainingDateItem';
 import { getShortDate, getShortName, isActiveDate } from '../../helpers';
+import LeadView from '../../components/LeadView';
 
-export default function TrainerScreen({ route, navigation }: StackScreenProps<ProfileTabParamList, 'TrainerScreen'>) {
+export default function ClientScreen({ route, navigation }: StackScreenProps<ProfileTabParamList, 'TrainerScreen'>) {
   const insets = useSafeAreaInsets();
   const { uid }: any = route.params;
 
-  const [trainer, trainerSet] = useState<{ id: string; name?: string; city?: string }>({ id: uid });
-  const [trainings, trainingsSet] = useState<{ id: string; title: string; date: number; duration: number }[]>([]);
+  const [trainer, trainerSet] = useState<{ id: string; name?: string; city?: string; extras?: string }>({ id: uid });
   useEffect(() => {
     firebase
       .database()
@@ -27,15 +27,6 @@ export default function TrainerScreen({ route, navigation }: StackScreenProps<Pr
       .then((snapshot) => {
         const value = snapshot.val();
         trainerSet({ id: uid, ...value });
-      });
-
-    firebase
-      .database()
-      .ref(`userTrainings/${uid}`)
-      .once('value')
-      .then((snapshot) => {
-        const value = snapshot.val();
-        trainingsSet(Object.values(value || {}));
       });
   }, []);
   const [avatar, avatarSet] = useState();
@@ -68,18 +59,11 @@ export default function TrainerScreen({ route, navigation }: StackScreenProps<Pr
           <Spacer height={30} />
         </View>
 
-        <View>
-          {trainings.map((training) => (
-            <TrainingDateItem
-              key={training.id}
-              onPress={() => navigation.push('TrainingScreen', { id: training.id } as any)}
-              isActive={isActiveDate(training.date, training.duration)}
-              title={training.title}
-              date={getShortDate(training.date)}
-              withLine
-            />
-          ))}
-        </View>
+        {trainer.extras && (
+          <LeadView>
+            <Text>{trainer.extras}</Text>
+          </LeadView>
+        )}
       </View>
     </ScrollView>
   );

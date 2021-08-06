@@ -10,7 +10,7 @@ import { UserContext } from '../../context';
 
 export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTabParamList, 'ChatsListScreen'>) {
   const [user] = useContext(UserContext);
-  const [chatrooms, chatroomsSet] = useState<{ id: string; name: string; lastMessage: string }[]>([]);
+  const [chatrooms, chatroomsSet] = useState<{ id: string; name: string; userId?: string; lastMessage: string }[]>([]);
   useEffect(() => {
     firebase
       .database()
@@ -20,6 +20,19 @@ export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTa
         chatroomsSet(Object.values(value || {}));
       });
   }, []);
+
+  const [avatars, avatarsSet] = useState<any>({});
+  useEffect(() => {
+    if (!chatrooms) return;
+
+    Object.values(chatrooms).forEach((person) => {
+      const personId = (person as any).userId;
+      const avatarRef = firebase.storage().ref(`users/${personId}.png`);
+      avatarRef.getDownloadURL().then((url) => {
+        avatarsSet({ ...avatars, [personId]: url });
+      });
+    });
+  }, [chatrooms]);
   return (
     <SafeAreaView>
       <StatusBar style="dark" />
@@ -29,6 +42,7 @@ export default function ChatsListScreen({ navigation }: StackScreenProps<ChatsTa
 
           {chatrooms.map((chatroom) => (
             <CardSmall
+              image={avatars[chatroom.userId || 0]}
               key={chatroom.id}
               onPress={() => navigation.push('ChatScreen', { ...chatroom } as any)}
               withLine

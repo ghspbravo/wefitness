@@ -37,6 +37,11 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
       trainingsRef.off('value');
     };
   }, []);
+  const [avatar, avatarSet] = useState();
+  useEffect(() => {
+    const avatarRef = firebase.storage().ref(`users/${user.id}.png`);
+    avatarRef.getDownloadURL().then(avatarSet);
+  }, []);
   return (
     <ScrollView>
       <StatusBar style="light" />
@@ -53,7 +58,7 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
           right={<Button use="link" style={{ color: Colors.white }} onPress={onLogoutPress} caption="Выйти" />}
         />
         <View style={{ alignItems: 'center' }}>
-          <Image style={{ marginTop: 15 }} use="rounded" width={160} height={160} />
+          <Image src={avatar} style={{ marginTop: 15 }} use="rounded" width={160} height={160} />
         </View>
       </View>
       <Spacer height={45} />

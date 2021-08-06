@@ -10,7 +10,6 @@ import { ProfileTabParamList } from '../../types';
 
 export default function TrainersScreen({ navigation }: StackScreenProps<ProfileTabParamList, 'TrainersScreen'>) {
   const [categories, categoriesSet] = useState<any>({});
-
   useEffect(() => {
     firebase
       .database()
@@ -21,6 +20,21 @@ export default function TrainersScreen({ navigation }: StackScreenProps<ProfileT
         categoriesSet(values || {});
       });
   }, []);
+
+  const [avatars, avatarsSet] = useState<any>({});
+  useEffect(() => {
+    if (!categories) return;
+
+    Object.values(categories).forEach((trainersList) => {
+      Object.values(trainersList as any).forEach((trainer) => {
+        const trainerId = (trainer as any).uid;
+        const avatarRef = firebase.storage().ref(`users/${trainerId}.png`);
+        avatarRef.getDownloadURL().then((url) => {
+          avatarsSet({ ...avatars, [trainerId]: url });
+        });
+      });
+    });
+  }, [categories]);
   return (
     <SafeAreaView>
       <StatusBar style="dark" />
@@ -35,6 +49,7 @@ export default function TrainersScreen({ navigation }: StackScreenProps<ProfileT
                 {((Object.values(categories[cat]) as any) || []).map((user: { name: string; uid: string }) => (
                   <ScrollView key={user.uid} style={{ paddingVertical: 10 }} horizontal>
                     <CardLarge
+                      image={avatars[user.uid]}
                       onPress={() => navigation.push('TrainerScreen', { uid: user.uid } as any)}
                       style={{ marginRight: 15 }}
                       title={user.name}

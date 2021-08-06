@@ -100,6 +100,7 @@ function ChatsNavigator() {
     <ChatsStack.Navigator headerMode="none">
       <ChatsStack.Screen name="ChatsListScreen" component={ChatsListScreen} />
       <ChatsStack.Screen name="ChatScreen" component={ChatScreen} />
+      <ChatsStack.Screen name="TrainerScreen" component={TrainerScreen} />
     </ChatsStack.Navigator>
   );
 }

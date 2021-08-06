@@ -30,6 +30,7 @@ export type CalendarTabParamList = {
 export type ChatsTabParamList = {
   ChatsListScreen: undefined;
   ChatScreen: undefined;
+  TrainerScreen: undefined;
 };
 
 export type UnsignedStackParamList = {
