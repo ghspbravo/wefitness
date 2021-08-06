@@ -17,6 +17,7 @@ import CardSmall from '../../components/CardSmall';
 import TrainingDateItem from '../../components/TrainingDateItem';
 import { getShortDate, getShortName, isActiveDate } from '../../helpers';
 
+let avatarLoaded = false;
 export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTabParamList, 'ProfileScreen'>) {
   const insets = useSafeAreaInsets();
 
@@ -38,9 +39,24 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
     };
   }, []);
   const [avatar, avatarSet] = useState();
-  useEffect(() => {
+  let repeatCounter = 0;
+  const tryLoadAvatar = () => {
     const avatarRef = firebase.storage().ref(`users/${user.id}.png`);
-    avatarRef.getDownloadURL().then(avatarSet);
+    avatarRef.getDownloadURL().then((url) => {
+      ++repeatCounter;
+      avatarSet(url);
+
+      if (url || repeatCounter > 4) {
+        avatarLoaded = true;
+      } else {
+        setTimeout(tryLoadAvatar, 1000);
+      }
+    });
+  };
+  useEffect(() => {
+    if (!avatarLoaded) {
+      tryLoadAvatar();
+    }
   }, []);
   return (
     <ScrollView>
