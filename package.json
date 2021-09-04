@@ -7,7 +7,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "build:ios": "sudo expo build:ios",
+    "build-trainer:ios": "sudo expo build:ios --config=app-trainer.json"
   },
   "jest": {
     "preset": "jest-expo"

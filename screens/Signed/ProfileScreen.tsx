@@ -94,8 +94,8 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
           tab2="Тренировки"
           tab1Content={
             <View>
-              <CardSmall title="Мои показатели" text="Отслеживайте свой прогресс" withLine />
-              <CardSmall title="Мой кошелёк" text="Пополните кошелёк на будущее" withLine />
+              {/* <CardSmall title="Мои показатели" text="Отслеживайте свой прогресс" withLine />
+              <CardSmall title="Мой кошелёк" text="Пополните кошелёк на будущее" withLine /> */}
               <CardSmall
                 onPress={() => navigation.push('TrainersScreen')}
                 title="Список тренеров"

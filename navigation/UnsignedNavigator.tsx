@@ -3,7 +3,6 @@ import * as React from 'react';
 import EnterScreen from '../screens/Unsigned/EnterScreen';
 import LoginScreen from '../screens/Unsigned/LoginScreen';
 import RegistrationScreen from '../screens/Unsigned/RegistrationScreen';
-import _ComponentsScreen from '../screens/_ComponentsScreen';
 import { UnsignedStackParamList } from '../types';
 
 const UnsignedStack = createStackNavigator<UnsignedStackParamList>();

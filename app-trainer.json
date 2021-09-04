@@ -20,8 +20,13 @@
     ],
     "ios": {
       "bundleIdentifier": "com.zotovda.wefitnesstrainers",
-      "buildNumber": "1.0.0",
-      "supportsTablet": true
+      "buildNumber": "1.0.2",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Приложение использует камеру, чтобы обновить фотографию профиля.",
+        "NSPhotoLibraryUsageDescription": "Приложение использует фото, чтобы обновить фотографию профиля.",
+        "NSPhotoLibraryAddUsageDescription": "Приложение использует фото, чтобы обновить фотографию профиля."
+      }
     },
     "android": {
       "adaptiveIcon": {

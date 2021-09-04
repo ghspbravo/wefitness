@@ -86,8 +86,8 @@ export default function _ComponentsScreen() {
           <TrainingDateItem isActive title="Стречинг" date="22.09" />
 
           <Spacer />
-          <TrainingTimeItem withLine title="Стречинг" time="14-00" duration="30min" />
-          <TrainingTimeItem title="Силовая тренировка" time="14-00" duration="60min" />
+          <TrainingTimeItem withLine title="Стречинг" time="14-00" duration={30} />
+          <TrainingTimeItem title="Силовая тренировка" time="14-00" duration={60} />
 
           <Spacer />
           <LeadView>
