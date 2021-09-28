@@ -101,6 +101,7 @@ function ChatsNavigator() {
       <ChatsStack.Screen name="ChatsListScreen" component={ChatsListScreen} />
       <ChatsStack.Screen name="ChatScreen" component={ChatScreen} />
       <ChatsStack.Screen name="TrainerScreen" component={TrainerScreen} />
+      <TabTwoStack.Screen name="TrainingScreen" component={TrainingScreen} />
     </ChatsStack.Navigator>
   );
 }
