@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Colors from '../constants/Colors';
+import { FormatedTextView } from './FormattedText';
 import { Text } from './Typo';
 import { View } from './View';
 
@@ -30,7 +31,9 @@ const Message = ({ children, isSent }: Props) => {
   return (
     <View style={styles.messageRow}>
       <View style={[styles.message, isSent ? styles.messageSent : styles.messageReceived]}>
-        <Text color={isSent ? Colors.white : Colors.black}>{children}</Text>
+        <Text color={isSent ? Colors.white : Colors.black}>
+          <FormatedTextView body={children} isDarkMode={isSent} />
+        </Text>
       </View>
     </View>
   );

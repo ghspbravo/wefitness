@@ -112,13 +112,15 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
           isAcsent
           hasBackAction
           right={
-            <Button
-              disabled={loading}
-              use="outline"
-              onPress={userJoined ? onViewPress : onJoinPress}
-              style={{ padding: 6 }}
-              caption={userJoined ? 'Смотреть' : 'Записаться'}
-            />
+            userJoined ? undefined : (
+              <Button
+                disabled={loading}
+                use="outline"
+                onPress={userJoined ? onViewPress : onJoinPress}
+                style={{ padding: 6 }}
+                caption={userJoined ? 'Смотреть' : 'Записаться'}
+              />
+            )
           }
         />
       </View>

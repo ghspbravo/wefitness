@@ -7335,6 +7335,11 @@ react-native-screens@~3.0.0:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.0.0.tgz#ee4c2d69abf7411603868b57214feec5e8f637fa"
   integrity sha512-35II5oxTaVp3OP8y0eLPOPpQkxG4fRKQ+dL1YSE1we5kCZFOU0l/Rn0T79HbyUu1LPwUZr6lZupPs0ULnRyMuQ==
 
+react-native-twitter-textview@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-twitter-textview/-/react-native-twitter-textview-1.0.7.tgz#75e9b9a1e55b36cbfe10e2b25c1b99e481e779e6"
+  integrity sha512-2vgXYNc6xVBYCGBMTenlMtTWsRqJI0XEgmNcG8D7D/OkUuQe1ut8kxFDud4flzTMjFCexkcX8k1HjCxorTDBSA==
+
 react-native-web@~0.13.12:
   version "0.13.18"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.13.18.tgz#964f058a16521a3b9a31b091415edfef5b6ef305"

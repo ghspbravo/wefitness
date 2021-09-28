@@ -15,17 +15,15 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.zotovda.wefitness",
-      "buildNumber": "1.0.3",
-      "supportsTablet": true,
+      "buildNumber": "1.0.5",
+      "supportsTablet": false,
       "infoPlist": {
-        "NSCameraUsageDescription": "Приложение использует камеру, чтобы обновить фотографию профиля.",
-        "NSPhotoLibraryUsageDescription": "Приложение использует фото, чтобы обновить фотографию профиля.",
-        "NSPhotoLibraryAddUsageDescription": "Приложение использует фото, чтобы обновить фотографию профиля."
+        "NSCameraUsageDescription": "Приложение использует камеру, чтобы установить/обновить фотографию профиля.",
+        "NSPhotoLibraryUsageDescription": "Приложение использует фото, чтобы установить/обновить фотографию профиля.",
+        "NSPhotoLibraryAddUsageDescription": "Приложение использует фото, чтобы установить/обновить фотографию профиля."
       }
     },
     "android": {
