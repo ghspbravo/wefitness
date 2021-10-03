@@ -20,7 +20,7 @@ export function getTime(timestamp: number | string) {
   return moment(timestamp).format('HH-mm');
 }
 
-export function isActiveDate(timestamp: number, duration: number) {
+export function isActiveDate(timestamp: number, duration: number = 0) {
   const date = moment(timestamp);
   return date.add(duration, 'm').valueOf() > moment().valueOf();
 }

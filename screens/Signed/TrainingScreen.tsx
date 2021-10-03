@@ -13,7 +13,7 @@ import { Text } from '../../components/Typo';
 import LeadView from '../../components/LeadView';
 import Button from '../../components/Button';
 import { UserContext } from '../../context';
-import { getChatroomId } from '../../helpers';
+import { getChatroomId, isActiveDate } from '../../helpers';
 
 export default function TrainingScreen({ route, navigation }: StackScreenProps<ProfileTabParamList, 'TrainingScreen'>) {
   const insets = useSafeAreaInsets();
@@ -112,7 +112,7 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
           isAcsent
           hasBackAction
           right={
-            userJoined ? undefined : (
+            userJoined ? undefined : !isActiveDate(training.date || 0, training.duration) ? (
               <Button
                 disabled={loading}
                 use="outline"
@@ -120,7 +120,7 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
                 style={{ padding: 6 }}
                 caption={userJoined ? 'Смотреть' : 'Записаться'}
               />
-            )
+            ) : undefined
           }
         />
       </View>

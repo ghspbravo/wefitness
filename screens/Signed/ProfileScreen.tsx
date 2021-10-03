@@ -100,6 +100,7 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
                 onPress={() => navigation.push('TrainersScreen')}
                 title="Список тренеров"
                 text="Вы всегда выбрать персональную тренировку"
+                icon="account-group"
                 withLine
               />
             </View>

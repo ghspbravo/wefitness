@@ -17,7 +17,13 @@ import { UserContext } from '../../context';
 import { Text } from '../../components/Typo';
 
 export default function ChatScreen({ route, navigation }: StackScreenProps<ChatsTabParamList, 'ChatScreen'>) {
-  const { id, name, userId }: any = route.params;
+  const { id, name: trainingTitle, userId }: any = route.params;
+
+  const titleRegexp = new RegExp('(.+) – (.+)', 'g'),
+    matches = titleRegexp.exec(trainingTitle) || ['', ''],
+    name = matches[1],
+    title = matches[2];
+
   const [user] = useContext(UserContext);
 
   const [loading, loadingSet] = useState(false);
@@ -78,6 +84,12 @@ export default function ChatScreen({ route, navigation }: StackScreenProps<Chats
                   ) : undefined
                 }
               />
+              {title ? (
+                <Text style={{ textAlign: 'center' }} use="h2">
+                  {title}
+                </Text>
+              ) : null}
+              <Spacer height={30} />
 
               {loadingMessages ? (
                 <Text>...</Text>

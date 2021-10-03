@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
+import Icon from './Icon';
 import Image from './Image';
 import Spacer from './Spacer';
 import { Text } from './Typo';
@@ -8,12 +9,13 @@ import { View } from './View';
 
 interface Props {
   image?: string;
+  icon?: string;
   title: string;
   text?: string;
   withLine?: boolean;
 }
 
-const CardSmall = ({ image, title, text, withLine, ...otherProps }: Props & TouchableOpacity['props']) => {
+const CardSmall = ({ image, icon, title, text, withLine, ...otherProps }: Props & TouchableOpacity['props']) => {
   const styles = StyleSheet.create({
     row: {
       flex: 1,
@@ -34,7 +36,8 @@ const CardSmall = ({ image, title, text, withLine, ...otherProps }: Props & Touc
     <View>
       <TouchableOpacity activeOpacity={0.6} style={[styles.row, styles.cardContainer]} {...otherProps}>
         <View style={{ marginRight: 15 }}>
-          <Image use="square" width={50} height={50} src={image} />
+          {!icon && <Image use="square" width={50} height={50} src={image} />}
+          {icon && <Icon size={50} name={icon as any} />}
         </View>
 
         <View style={{ flex: 1 }}>
