@@ -74,6 +74,7 @@ function ProfileNavigator() {
     <ProfileStack.Navigator headerMode="none">
       <ProfileStack.Screen name="ProfileScreen" component={TrainerProfileScreen} />
       <ProfileStack.Screen name="TrainingScreen" component={TrainingScreen} />
+      <TabTwoStack.Screen name="TrainerScreen" component={ClientScreen} />
     </ProfileStack.Navigator>
   );
 }

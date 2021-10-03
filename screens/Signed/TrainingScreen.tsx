@@ -13,12 +13,17 @@ import { Text } from '../../components/Typo';
 import LeadView from '../../components/LeadView';
 import Button from '../../components/Button';
 import { UserContext } from '../../context';
-import { getChatroomId, isActiveDate } from '../../helpers';
+import { getChatroomId, isActiveDate, isTrainerApp } from '../../helpers';
+import Icon from '../../components/Icon';
 
 export default function TrainingScreen({ route, navigation }: StackScreenProps<ProfileTabParamList, 'TrainingScreen'>) {
   const insets = useSafeAreaInsets();
   const { id }: any = route.params;
 
+  interface AttendeeInterface {
+    id: string;
+    name: string;
+  }
   const [training, trainingSet] = useState<{
     title?: string;
     description?: string;
@@ -28,6 +33,7 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
     link?: string;
     date?: number;
     duration?: number;
+    attendesList?: any;
   }>({});
   const [userJoined, userJoinedSet] = useState(false);
   const [loading, loadingSet] = useState(true);
@@ -65,12 +71,25 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
   };
   const onJoinPress = async () => {
     loadingSet(true);
+
+    // CREATE NEW TRAINING IN USER TRAININGS LIST
     await firebase.database().ref(`userTrainings/${user.id}`).push({
       id,
       date,
       duration,
       title
     });
+
+    // JOIN TO ATTENDEE LIST IN TRAINING
+    await firebase
+      .database()
+      .ref(`trainings/${id}/attendesList`)
+      .push({
+        id: user.id,
+        name: user.name
+      } as AttendeeInterface);
+
+    // CREATE CHATROOMS
     const chatroomId = getChatroomId(user.id || '', trainerId || '');
     await firebase
       .database()
@@ -97,6 +116,27 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
     loadingSet(false);
     userJoinedSet(true);
   };
+
+  function PersonLink(personId: string, personName: string) {
+    const onPersonPress = () => {
+      navigation.push('TrainerScreen', { uid: personId } as any);
+    };
+    return (
+      <Button
+        key={personId}
+        use="link"
+        style={{ paddingVertical: 5 }}
+        onPress={onPersonPress}
+        caption={
+          <Text use="h6">
+            {personName} <Icon size={16} name="arrow-top-right" />
+          </Text>
+        }
+      />
+    );
+  }
+
+  const attendees = (training.attendesList && (Object.values(training.attendesList) as AttendeeInterface[])) || [];
   return (
     <ScrollView>
       <StatusBar style="light" />
@@ -112,7 +152,7 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
           isAcsent
           hasBackAction
           right={
-            userJoined ? undefined : !isActiveDate(training.date || 0, training.duration) ? (
+            userJoined ? undefined : isActiveDate(training.date || 0, training.duration) ? (
               <Button
                 disabled={loading}
                 use="outline"
@@ -135,9 +175,17 @@ export default function TrainingScreen({ route, navigation }: StackScreenProps<P
         </LeadView>
 
         <Spacer />
-        <Text>Вас будет тренировать:</Text>
+        <Text>{isTrainerApp ? 'На тренировку записаны' : 'Вас будет тренировать'}:</Text>
         <Spacer />
-        <Text use="h6">{trainerName}</Text>
+        {!isTrainerApp && trainerName && trainerId ? PersonLink(trainerId, trainerName) : null}
+
+        {isTrainerApp ? (
+          attendees?.length > 0 ? (
+            attendees?.map((person: AttendeeInterface) => PersonLink(person.id, person.name))
+          ) : (
+            <Text>Никто не записан на тренировку</Text>
+          )
+        ) : null}
 
         <Spacer height={30} />
         <Text use="h2">Инвентарь</Text>

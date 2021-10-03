@@ -11,7 +11,6 @@ import { View } from 'react-native';
 import Icon from '../components/Icon';
 
 import Colors from '../constants/Colors';
-import NotFoundScreen from '../screens/NotFoundScreen';
 import CalendarScreen from '../screens/Signed/CalendarScreen';
 import ChatScreen from '../screens/Signed/ChatScreen';
 import ChatsListScreen from '../screens/Signed/ChatsListScreen';
@@ -89,6 +88,7 @@ function CalendarNavigator() {
     <TabTwoStack.Navigator headerMode="none">
       <TabTwoStack.Screen name="CalendarScreen" component={CalendarScreen} />
       <TabTwoStack.Screen name="TrainingScreen" component={TrainingScreen} />
+      <TabTwoStack.Screen name="TrainerScreen" component={TrainerScreen} />
     </TabTwoStack.Navigator>
   );
 }
@@ -101,7 +101,7 @@ function ChatsNavigator() {
       <ChatsStack.Screen name="ChatsListScreen" component={ChatsListScreen} />
       <ChatsStack.Screen name="ChatScreen" component={ChatScreen} />
       <ChatsStack.Screen name="TrainerScreen" component={TrainerScreen} />
-      <TabTwoStack.Screen name="TrainingScreen" component={TrainingScreen} />
+      <ChatsStack.Screen name="TrainingScreen" component={TrainingScreen} />
     </ChatsStack.Navigator>
   );
 }

@@ -25,12 +25,14 @@ export type ProfileTabParamList = {
 export type CalendarTabParamList = {
   CalendarScreen: undefined;
   TrainingScreen: undefined;
+  TrainerScreen: undefined;
 };
 
 export type ChatsTabParamList = {
   ChatsListScreen: undefined;
   ChatScreen: undefined;
   TrainerScreen: undefined;
+  TrainingScreen: undefined;
 };
 
 export type UnsignedStackParamList = {
