@@ -48,7 +48,7 @@ export default function ProfileScreen({ navigation }: StackScreenProps<ProfileTa
       ++repeatCounter;
       avatarSet(url);
 
-      if (url || repeatCounter > 4) {
+      if (url || repeatCounter > 10) {
         avatarLoaded = true;
       } else {
         setTimeout(tryLoadAvatar, 1000);
