@@ -43,7 +43,7 @@ export default function CreateTrainingScreen() {
   };
 
   const onSubmitHandler = async () => {
-    if (!title || !description || !inventory || !link || !duration) {
+    if (!title || !description || !inventory || !duration) {
       return errorSet('Заполните все поля!');
     }
     errorSet('');
@@ -67,7 +67,6 @@ export default function CreateTrainingScreen() {
         description: description,
         duration: durationNumber,
         inventory: inventory,
-        link: link,
         title: title,
         trainerId: user.id,
         trainerName: user.name
@@ -110,7 +109,7 @@ export default function CreateTrainingScreen() {
 
       onSuccess();
     } catch (e) {
-      errorSet(e || 'Неверный формат данных');
+      errorSet(e as string || 'Неверный формат данных');
     } finally {
       setLoading(false);
     }
@@ -180,13 +179,14 @@ export default function CreateTrainingScreen() {
                 <Spacer height={20} />
                 <Input
                   ref={durationInput}
-                  onSubmitEditing={() => linkInput.current?.focus()}
+                  onSubmitEditing={onSubmitHandler}
+                  // onSubmitEditing={() => linkInput.current?.focus()}
                   value={duration}
                   onChangeText={durationSet}
-                  returnKeyType="next"
+                  returnKeyType="done"
                   placeholder="Длительность (в мин.)"
                 />
-                <Spacer height={20} />
+                {/* <Spacer height={20} />
                 <Input
                   ref={linkInput}
                   onSubmitEditing={onSubmitHandler}
@@ -194,7 +194,7 @@ export default function CreateTrainingScreen() {
                   onChangeText={linkSet}
                   returnKeyType="done"
                   placeholder="Ссылка на занятие"
-                />
+                /> */}
 
                 <Spacer />
                 {!!error && <Text color={Colors.danger}>{error}</Text>}
